@@ -1,7 +1,7 @@
 import pyrealsense2 as rs
 import numpy as np
 import cv2
-from datetime import datetime
+import time
 
 
 class IntelRealSense:
@@ -67,16 +67,14 @@ class IntelRealSense:
         color_image = np.asanyarray(color_frame.get_data())
         return alignFlag, color_image, depth_image
 
-    def save_pic(self, colorImage, depthImage_3d):
+    def save_pic(self, colorImage, depthImage_3d, counter):
         # use timeStamp as file's name
-        nowTime = datetime.now()
-        current_time = nowTime.strftime("%H.%M.%S.%Y")
-        addressRgb = rf"rgb\{current_time}.PNG"
-        addressDepth = rf"depth\{current_time}.PNG"
+        addressRgb = rf"rgb/{counter}.PNG"
+        addressDepth = rf"depth/{counter}.PNG"
         cv2.imwrite(addressRgb, colorImage)
         cv2.imwrite(addressDepth, depthImage_3d)
 
-        self.file.write(f"{current_time} {addressRgb} {current_time} {addressDepth}\n")
+        self.file.write(f"{counter} {addressRgb} {counter} {addressDepth}\n")
 
     def release(self):
         self.pipeline.stop()
